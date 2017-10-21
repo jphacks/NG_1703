@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Script-Type" content="text/javascript">
+<meta http-equiv="Content-Style-Type" content="text/css">
+
+<title>その他　面白９■画像のランダム配置</title>
+
+<!--★背景とタイトル文字指定。不要なら削除-->
+<style type="text/css"><!--
+body{
+	background:url("an6.gif")repeat-x #000;/*★横幅1000px縦幅250pxの魔女の背景画像と背景色黒色指定*/
+}
+
+/*★タイトル文字指定*/
+.test1{
+	margin-top:20px;
+	color: #f00;
+	font-size: 40px;
+	font-weight: bold;
+	text-shadow: 10px 10px 20px #000000;
+}
+--></style>
+
+</head>
+<body>
+
+<p class="test1">～◎動くJavaScript◎～</p><!--★タイトル文字指定。不要なら削除-->
+
+<!--★ここからコピー　位置はbodyの中です-->
+<script type="text/javascript"><!--
+/*================================================================================
+ランダムに画像を配置 By http://himajin.moo.jp/freejava/star.html(サイト：http:himajin.moo.jp)
+★画像を複数指定と透過指定にし、HTML5対応に改造　2017/06/16
+==================================================================================*/
+(function (){  //即時関数で囲んでグローバル変数を消すため、この行はこのままで
+
+//★画像指定。増減可能。画像を順番に"●",と区切って、いくつでも並べる。最後の ] の前には ,(カンマ) 無し
+var myurl="";       //★画像パス。文書とは別のフォルダーなどに入っている時は指定。全画像共通部分
+
+var posi="fixed"; 　//★スクロールに合わせて移動するか？　fixed推奨。位置固定：fixed　移動：absolute
+var opa=1;        //★画像透過指定。1で透過無し。0で完全透明なので、0指定はしないこと
+var tp=150;         //★ランダム配置の上(top)からの位置。単位px
+var lp=0;           //★ランダム配置の左(left)からの位置。単位px
+
+//指定ここまで----------------------------------------------------------------------
+var i=0;
+var w=window.innerWidth-30;
+var h=window.innerHeight-40;
+var sss="";
+
+var xpx = Math.floor(w*Math.random())+lp; 
+var ypx = Math.floor(h*Math.random())+tp;
+sss="<div style='position:"+posi+"; left:"+xpx+"px; top:"+ypx+"px; z-index:-1; opacity:"+opa+";'><img src='VisitorsBell3.gif'></div>";
+	document.write(sss);
+
+}());//即時関数終了
+// --></script>
+<!--★ここまでコピー-->
+
+</body>
+</html>
