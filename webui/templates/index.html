@@ -1,33 +1,36 @@
 {% extends "layout.html" %}
 {% block body %}
 <h1>動画テストページ</h1>
-{% for content in contents %}
-	<li>{{content.title}}</li>
-	<li>{{content.body}}</li>
-{% endfor %}
 
-<!-- カメラの起動 --!>
+<!-- 実行ボタン --!>
 <button onclick="startVideo()">Start</button>
 <br />
+
+<!-- komagen_sd_clientの起動 --!>
+
+
+<!-- カメラの起動 --!>
 <video id="local_video" autoplay style="width: 1280px; height: 720px; border: 1px solid black;"></video>
+
+<!-- komagen_sd_clientからの返り値の受け取り--!>
 
 <!-- gifの読み込み --!>
 {% for content in contents %}
 	{% if content.title == "VisitorsBell" %}
 	<script type="text/javascript"><!--
 		var myurl="../static/gif/";
-		var posi="absolute";
-		var opa=1;
+		var mysrc="VisitorBell3.gif";
 		var tp=150;
 		var lp=100;
-
 		var w=500;
 		var h=400;
+		var opa="0.9"
+		var pos="absolute";
 		var sss="";
 
 		var xpx = Math.floor(w*Math.random())+lp; 
 		var ypx = Math.floor(h*Math.random())+tp;
-		sss="<div style='position:"+posi+"; left:"+xpx+"px; top:"+ypx+"px; opacity:"+opa+";'><img src="+myurl+"VisitorsBell3.gif></div>";
+		sss="<div style='position:"+pos+"; left:"+xpx+"px; top:"+ypx+"px; opacity:"+opa+";'><img src="+myurl+"VisitorsBell3.gif></div>";
  		document.write(sss);
 // --></script>
 	{% endif %}
