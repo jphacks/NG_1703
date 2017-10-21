@@ -22,4 +22,19 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="/static/js/bootstrap.min.js"></script>
 	</body>
+	<script type="text/javascript">
+		let localVideo = document.getElementById('local_video');
+		let localStream;
+		// start local video
+		function startVideo() {
+			navigator.mediaDevices.getUserMedia({video: true, audio: false})
+			.then(function (stream) { // success
+			localStream = stream;
+			localVideo.src = window.URL.createObjectURL(localStream);
+			}).catch(function (error) { // error
+				console.error('mediaDevice.getUserMedia() error:', error);
+				return;
+			});
+		}
+	</script>
 </html>
