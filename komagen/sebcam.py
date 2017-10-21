@@ -48,7 +48,7 @@ if __name__ == '__main__':
 
 
         # フレーム表示
-        cv2.imshow(ORG_WINDOW_NAME, c_frame)
+#        cv2.imshow(ORG_WINDOW_NAME, c_frame)
         cv2.imshow(GAUSSIAN_WINDOW_NAME, g_frame)
 
         # フレーム書き込み
