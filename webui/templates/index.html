@@ -2,12 +2,14 @@
 {% block body %}
 <h1>動画テストページ</h1>
 
+<!-- komagen_sd_clientの起動 --!>
+<form method="post">
+	<button type="submit">実行</button>
+</form>
+
 <!-- 実行ボタン --!>
 <button onclick="startVideo()">Start</button>
 <br />
-
-<!-- komagen_sd_clientの起動 --!>
-
 
 <!-- カメラの起動 --!>
 <center>
@@ -24,9 +26,9 @@
 		var myurl="../static/gif/";
 		var mysrc="VisitorBell3.gif";
 		var tp=150;
-		var lp=250;
+		var lp=260;
 		var w=300;
-		var h=160;
+		var h=200;
 		var wid="15vmin";
 		var hei="auto";
 		var opa="0.9"
