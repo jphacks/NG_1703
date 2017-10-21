@@ -1,5 +1,6 @@
 # -*- coding:utf-8
 
+import komagen_sd_client
 from flask import Flask, render_template, abort
 from flaski.models import WikiContent
 
