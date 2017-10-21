@@ -8,6 +8,7 @@ import requests
 import sys
 import json
 import string, random
+import cv2
 
 # set Device ID to variable "id".
 # Device ID: You can get the id from portal
@@ -23,7 +24,17 @@ edge_port = 80
 edge_ip_addr = ""
 session_id = ""
 
+# cv2.cv.CV_FOURCC
+def cv_fourcc(c1, c2, c3, c4):
+    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
+        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
 
+        #字幕生成
+def make_subtitle(c_frame,text,place_x,place_y,size):
+        font = cv2.FONT_HERSHEY_PLAIN
+        g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(255,255,0),3)
+
+        return (g_frame)
 
 # Generate random string. It is used in session create to cloud edge.
 def random_string(length, seq=string.digits + string.ascii_lowercase):
@@ -249,6 +260,33 @@ if __name__ == "__main__":
     global w_flag
     global chunk
 
+    ESC_KEY = 27     # Escキー
+    INTERVAL= 33     # 待ち時間
+    FRAME_RATE = 5  # fps
+
+    ORG_WINDOW_NAME = "org"
+    GAUSSIAN_WINDOW_NAME = "gaussian"
+
+#    GAUSSIAN_FILE_NAME = "gaussian.avi"
+
+    DEVICE_ID = 0
+
+    # カメラ映像取得
+    cap = cv2.VideoCapture(DEVICE_ID)
+
+    # 保存ビデオファイルの準備
+    end_flag, c_frame = cap.read()
+#    height, width, channels = c_frame.shape
+#    rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
+#                          cv_fourcc('X', 'V', 'I', 'D'), \
+#                          FRAME_RATE, \
+#                          (width, height), \
+#                          True)
+    # ウィンドウの準備
+ #   cv2.namedWindow(ORG_WINDOW_NAME)
+    cv2.namedWindow(GAUSSIAN_WINDOW_NAME)
+
+
     komagen_flag = True   
 
     create_edge()
@@ -269,7 +307,7 @@ if __name__ == "__main__":
             progress = int(new_progress)
             pre_progress = progress
         
-        sys.stderr.write("\rProgress %3s%%" % (progress))
+#        sys.stderr.write("\rProgress %3s%%" % (progress))
     sys.stderr.write("\n")
 
     if(edgeinfo["error"]):
@@ -284,9 +322,11 @@ if __name__ == "__main__":
 
     in_stream = start_sound_detect()
 
-    while in_stream.is_active():
+    while (in_stream.is_active() or (end_flag == True)):
+        text = "test"
+#as client
         if w_flag:
-            w_flag = False
+            w_flag = Fals
             if komagen_flag == True:
                 print("check start")
                 komagen_flag = False
@@ -296,14 +336,30 @@ if __name__ == "__main__":
             new_event = get_last_event()
             if(new_event != None):
                 if(old_event == None):
-                    old_event= new_event
+                    old_event= new_event 
                     e_flag = True
                 elif(old_event['unixtime'] != new_event['unixtime']):
-                    old_event= new_event
+                    old_event= new_event 
                     e_flag = True
-            if(e_flag):
-                print(""+new_event['event'])
+             if(e_flag):
+#                    print(""+new_event['event'])
+                 text = new_event['event']
+        #字幕生成
+        g_frame = make_subtitle(c_frame,text,200,200,3)
+        # フレーム書き込み
+#        rec.write(g_frame)
+        # フレーム表示
+        cv2.imshow(GAUSSIAN_WINDOW_NAME, g_frame)
+
+        # Escキーで終了
+#        key = cv2.waitKey(INTERVAL)
+#        if key == ESC_KEY:
+#            break
+
+        # 次のフレーム読み込み
+         end_flag, c_frame = cap.read()
     else:
         in_stream.stop_stream()
         in_stream.close()
-
+    # 終了処理
+    cv2.destroyAllWindows()
