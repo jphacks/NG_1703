@@ -1,6 +1,11 @@
-#!/usr/bin/env python
-# vim:fileencoding=utf-8
+#import for multi
+import os
+import time
+from concurrent.futures import ThreadPoolExecutor
+import random
+import queue
 
+#import for client
 import time
 import numpy as np
 import pyaudio as pa
@@ -8,7 +13,16 @@ import requests
 import sys
 import json
 import string, random
+
+#import for movie
 import cv2
+import PIL
+
+q = queue.Queue()
+
+#def cv_fourcc(c1, c2, c3, c4):
+#    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
+#        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
 
 # set Device ID to variable "id".
 # Device ID: You can get the id from portal
@@ -24,17 +38,7 @@ edge_port = 80
 edge_ip_addr = ""
 session_id = ""
 
-# cv2.cv.CV_FOURCC
-#def cv_fourcc(c1, c2, c3, c4):
-#    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
-#        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
 
-        #字幕生成
-def make_subtitle(c_frame,text,place_x,place_y,size):
-    font = cv2.FONT_HERSHEY_PLAIN
-    g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(255,255,0),3)
-
-    return (g_frame)
 
 # Generate random string. It is used in session create to cloud edge.
 def random_string(length, seq=string.digits + string.ascii_lowercase):
@@ -85,7 +89,7 @@ def create_edge():
 #    print("Booting Edge Server.")
     
     edge_id = r.json()["edge_id"]
-    print("edge id:" +edge_id)
+#    print("edge id:" +edge_id)
     return r.json() 
 
 
@@ -161,7 +165,7 @@ def connect_edge_server():
 
     data = r.json()
     session_id = data["session"]
-    print("Connected Successfully. Session ID:"+session_id)
+#    print("Connected Successfully. Session ID:"+session_id)
 
     return session_id
 
@@ -241,8 +245,8 @@ def start_sound_detect():
                 fs = int(p_in.get_device_info_by_index(i)['defaultSampleRate'])
     chank_size = fs * 1
 
-    print('use_device_index = ', use_device_index)
-    print('SampleRate = ', fs)
+#    print('use_device_index = ', use_device_index)
+#    print('SampleRate = ', fs)
 
     # generate an input stream
     in_stream = p_in.open(format=py_format,
@@ -256,49 +260,22 @@ def start_sound_detect():
     in_stream.start_stream()
     return in_stream
 
-if __name__ == "__main__":
+
+def _child_main_loop():
     global w_flag
     global chunk
-
-    ESC_KEY = 27     # Escキー
-    INTERVAL= 33     # 待ち時間
-    FRAME_RATE = 5  # fps
-
-#    ORG_WINDOW_NAME = "org"
-    GAUSSIAN_WINDOW_NAME = "gaussian"
-
-#    GAUSSIAN_FILE_NAME = "gaussian.avi"
-
-    DEVICE_ID = 0
-
-    # カメラ映像取得
-    cap = cv2.VideoCapture(DEVICE_ID)
-
-    # 保存ビデオファイルの準備
-    end_flag, c_frame = cap.read()
-#    height, width, channels = c_frame.shape
-#    rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
-#                          cv_fourcc('X', 'V', 'I', 'D'), \
-#                          FRAME_RATE, \
-#                          (width, height), \
-#                          True)
-    # ウィンドウの準備
- #   cv2.namedWindow(ORG_WINDOW_NAME)
-    cv2.namedWindow(GAUSSIAN_WINDOW_NAME)
-
 
     komagen_flag = True   
 
     create_edge()
 
-    print("Now creating your Cloud Edge. Please wait for approx 60 sec ..")
+#    print("Now creating your Cloud Edge. Please wait for approx 60 sec ..")
     
     edgeinfo = get_edge_info()
-    sys.stderr.write("Progress %3s%%" % (edgeinfo["progress"]))
+#    sys.stderr.write("Progress %3s%%" % (edgeinfo["progress"]))
     pre_progress = int(edgeinfo["progress"])
     progress = int(edgeinfo["progress"])
     while ((edgeinfo["ready"] == False) and (edgeinfo["error"] == False)):
-#        start = time.time()
         time.sleep(3)
         edgeinfo = get_edge_info()
         new_progress = int(edgeinfo["progress"])
@@ -315,56 +292,130 @@ if __name__ == "__main__":
         print("Fail to create your Cloud Edge.")
         sys.exit()
 
-    print("Edge Server IP address:", edge_ip_addr)
+#    print("Edge Server IP address:", edge_ip_addr)
 
     w_flag = False
 
     old_event = get_last_event()
 
     in_stream = start_sound_detect()
-        
-    count = 0
-    while (in_stream.is_active() or (end_flag == True)):
-        if (count % 40 == 0): 
-            text = "test"
-#as client
-            if w_flag:
-                w_flag = False
-                if komagen_flag == True:
-                    print("check start")
-                    komagen_flag = False
-                send_chunk_edge_server(chunk)
+
+    while in_stream.is_active():
+        if w_flag:
+            w_flag = False
+            if komagen_flag == True:
+                print("check start")
+                komagen_flag = False
+            send_chunk_edge_server(chunk)
             
-                e_flag = False
-                new_event = get_last_event()
-                if(new_event != None):
-                    if(old_event == None):
-                        old_event= new_event 
-                        e_flag = True
-                    elif(old_event['unixtime'] != new_event['unixtime']):
-                        old_event= new_event 
-                        e_flag = True
-                if(e_flag):
-#                    print(""+new_event['event'])
-                    text = new_event['event']
-        count += 1
-#            print("time = {}".format(time.time()-start)) 
-       #字幕生成
-        g_frame = make_subtitle(c_frame,text,200,200,3)
-        # フレーム書き込み
-#        rec.write(g_frame)
+            e_flag = False
+            new_event = get_last_event()
+            if(new_event != None):
+                if(old_event == None):
+                    old_event= new_event
+                    e_flag = True
+                elif(old_event['unixtime'] != new_event['unixtime']):
+                    old_event= new_event
+                    e_flag = True
+            if(e_flag):
+                q.put(new_event['event'])
+                print("did q.put")
+#                print(""+new_event['event'])
+    else:
+        in_stream.stop_stream()
+        in_stream.close()
+
+
+#        items = ["Game", "Manga", "Anime"]
+#        while True:
+    
+#            item = items[random.randrange(0, len(items))]
+#            price = random.randrange(2000, 10000)
+#            queue.put((item, price, os.getpid()))
+
+#            time.sleep(1)
+
+def draw_text_at_center(img, text):
+  draw = PIL.ImageDraw.Draw(img)
+  draw.font = PIL.ImageFont.truetype(
+    "/usr/share/fonts/truetype/freefont/FreeMono.ttf", 20)
+
+  img_size = numpy.array(img.size)
+  txt_size = numpy.array(draw.font.getsize(text))
+  pos = (img_size - txt_size) / 2
+
+  draw.text(pos, text, (255, 255, 255))
+
+if __name__ == '__main__':
+
+    pool = ThreadPoolExecutor(1)
+    pool.submit(_child_main_loop)
+    time.sleep(60)
+    print("sleep ended")
+#        ESC_KEY = 27     # Escキー
+#        INTERVAL= 33     # 待ち時間
+#        FRAME_RATE = 30  # fps
+#     ORG_WINDOW_NAME = "org"
+    GAUSSIAN_WINDOW_NAME = "gaussian"
+
+#        GAUSSIAN_FILE_NAME = "gaussian.avi"
+
+    DEVICE_ID = 0
+
+    # カメラ映像取得
+    cap = cv2.VideoCapture(DEVICE_ID)
+
+    # 保存ビデオファイルの準備
+    end_flag, c_frame = cap.read()
+    height, width, channels = c_frame.shape
+    print("h = {},w = {},c = {}".format(height,width,channels))
+#        rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
+#                              cv_fourcc('X', 'V', 'I', 'D'), \
+#                              FRAME_RATE, \
+#                              (width, height), \
+#                              True)
+
+    # ウィンドウの準備
+#        cv2.namedWindow(ORG_WINDOW_NAME)
+    cv2.namedWindow(GAUSSIAN_WINDOW_NAME)
+        
+    text = "test"
+    font = cv2.FONT_HERSHEY_PLAIN
+    # 変換処理ループ
+    while end_flag == True:
+        # ガウシアン平滑化
+        #g_frame = cv2.GaussianBlur(c_frame, (15, 15), 10)
+
+        #字幕生成
+        if q.empty != True:
+            text = q.get()
+            print("did q.get")
+#         print("OK")
+        font = cv2.FONT_HERSHEY_PLAIN
+#        g_frame = cv2.putText(c_frame,text,(100,100),font, 3,(255,255,0),3)
+        draw_text_at_center(c_frame,text)
+
         # フレーム表示
-        cv2.imshow(GAUSSIAN_WINDOW_NAME, g_frame)
+#            cv2.imshow(ORG_WINDOW_NAME, c_frame)
+        cv2.imshow(GAUSSIAN_WINDOW_NAME, c_frame)
+
+        # フレーム書き込み
+#            rec.write(g_frame)
 
         # Escキーで終了
         key = cv2.waitKey(INTERVAL)
         if key == ESC_KEY:
-            break
+                break
 
         # 次のフレーム読み込み
         end_flag, c_frame = cap.read()
-    else:
-        in_stream.stop_stream()
-        in_stream.close()
+        if end_flag == False:
+            print("cap.read error!")            
     # 終了処理
     cv2.destroyAllWindows()
+    cap.release()
+#    rec.release()
+
+
+#        while True:
+#            print (self.queue.get())
