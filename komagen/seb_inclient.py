@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # vim:fileencoding=utf-8
-
 import time
 import numpy as np
 import pyaudio as pa
