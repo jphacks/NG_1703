@@ -16,7 +16,7 @@ def index():
 @app.route("/", methods=["POST"])
 def callkomagen():
 	koma = komates.komagen()
-	return koma
+	return None
 
 if __name__ == "__main__":
 	app.run()
