@@ -16,9 +16,9 @@ import string, random
 #import for movie
 import cv2
 
-def cv_fourcc(c1, c2, c3, c4):
-    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
-        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
+#def cv_fourcc(c1, c2, c3, c4):
+#    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
+#        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
 
 # set Device ID to variable "id".
 # Device ID: You can get the id from portal
@@ -186,7 +186,7 @@ def send_chunk_edge_server(chunk):
     if(r.status_code > 299):
         print ("Error! Edge server replied error code:"+str(r.status_code))
         sys.exit()
-#    print("Send data successfully")
+    print("Send data successfully")
     return True
 
 
@@ -274,12 +274,12 @@ class NeetsDaemon(object):
         self._parent_main_loop()
 
     def _parent_main_loop(self):
-        time.sleep(100)
-        ESC_KEY = 27     # Escキー
-        INTERVAL= 33     # 待ち時間
-        FRAME_RATE = 30  # fps
+        time.sleep(60)
+#        ESC_KEY = 27     # Escキー
+#        INTERVAL= 33     # 待ち時間
+#        FRAME_RATE = 30  # fps
 
-#        ORG_WINDOW_NAME = "org"
+        ORG_WINDOW_NAME = "org"
         GAUSSIAN_WINDOW_NAME = "gaussian"
 
 #        GAUSSIAN_FILE_NAME = "gaussian.avi"
@@ -292,6 +292,7 @@ class NeetsDaemon(object):
     # 保存ビデオファイルの準備
         end_flag, c_frame = cap.read()
         height, width, channels = c_frame.shape
+        print("h = {},w = {},c = {}".format(height,width,channels))
 #        rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
 #                              cv_fourcc('X', 'V', 'I', 'D'), \
 #                              FRAME_RATE, \
@@ -301,7 +302,9 @@ class NeetsDaemon(object):
     # ウィンドウの準備
 #        cv2.namedWindow(ORG_WINDOW_NAME)
         cv2.namedWindow(GAUSSIAN_WINDOW_NAME)
-
+        
+        text = "test"
+        font = cv2.FONT_HERSHEY_PLAIN
     # 変換処理ループ
         while end_flag == True:
         # ガウシアン平滑化
@@ -310,13 +313,14 @@ class NeetsDaemon(object):
         #字幕生成
             if self.queue.empty != True:
                 text = self.queue.get()
+                print("did queue.get")
 #            print("OK")
             font = cv2.FONT_HERSHEY_PLAIN
-            g_frame = cv2.putText(c_frame,text,(100,100),font, 5,(255,255,0),3)
+            g_frame = cv2.putText(c_frame,text,(100,100),font, 3,(255,255,0),3)
 
 
         # フレーム表示
-#        cv2.imshow(ORG_WINDOW_NAME, c_frame)
+#            cv2.imshow(ORG_WINDOW_NAME, c_frame)
             cv2.imshow(GAUSSIAN_WINDOW_NAME, g_frame)
 
         # フレーム書き込み
@@ -329,7 +333,7 @@ class NeetsDaemon(object):
 
         # 次のフレーム読み込み
             end_flag, c_frame = cap.read()
-
+            
     # 終了処理
         cv2.destroyAllWindows()
         cap.release()
@@ -397,6 +401,7 @@ class NeetsDaemon(object):
                         e_flag = True
                 if(e_flag):
                     queue.put(new_event['event'])
+                    print("did queue.put")
 #                print(""+new_event['event'])
         else:
             in_stream.stop_stream()
