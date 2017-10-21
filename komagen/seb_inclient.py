@@ -30,11 +30,11 @@ session_id = ""
 #        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
 
         #字幕生成
-def make_subtitle(c_frame,text,place_x,place_y,size):
-    font = cv2.FONT_HERSHEY_PLAIN
-    g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(255,255,0),3)
+#def make_subtitle(c_frame,text,place_x,place_y,size,R,G,B):
+#    font = cv2.FONT_HERSHEY_PLAIN
+#    g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(R,G,B),3)
 
-    return (g_frame)
+#    return (g_frame)
 
 # Generate random string. It is used in session create to cloud edge.
 def random_string(length, seq=string.digits + string.ascii_lowercase):
@@ -347,19 +347,29 @@ if __name__ == "__main__":
                 if(e_flag):
 #                    print(""+new_event['event'])
                     text = new_event['event']
-        count += 1
+
 #            print("time = {}".format(time.time()-start)) 
+        if(count % 40 == 0):
+            R = int(random.uniform(0,200))
+            G = int(random.uniform(0,200))
+            B = int(random.uniform(0,200))
        #字幕生成
-        g_frame = make_subtitle(c_frame,text,200,200,3)
+            place_x = int(random.uniform(100,400))
+            place_y = int(random.uniform(100,400))
+            font = cv2.FONT_HERSHEY_PLAIN
+            size = int(random.uniform(1,10))
+        count += 1
+        g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(R,G,B),3)
+#        g_frame = make_subtitle(c_frame,text,200,200,3)
         # フレーム書き込み
 #        rec.write(g_frame)
         # フレーム表示
         cv2.imshow(GAUSSIAN_WINDOW_NAME, g_frame)
 
         # Escキーで終了
-        key = cv2.waitKey(INTERVAL)
-        if key == ESC_KEY:
-            break
+#        key = cv2.waitKey(INTERVAL)
+#        if key == ESC_KEY:
+#            break
 
         # 次のフレーム読み込み
         end_flag, c_frame = cap.read()

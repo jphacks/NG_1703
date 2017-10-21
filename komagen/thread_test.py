@@ -89,7 +89,7 @@ def create_edge():
 #    print("Booting Edge Server.")
     
     edge_id = r.json()["edge_id"]
-#    print("edge id:" +edge_id)
+    print("edge id:" +edge_id)
     return r.json() 
 
 
@@ -165,7 +165,7 @@ def connect_edge_server():
 
     data = r.json()
     session_id = data["session"]
-#    print("Connected Successfully. Session ID:"+session_id)
+    print("Connected Successfully. Session ID:"+session_id)
 
     return session_id
 
@@ -269,10 +269,10 @@ def _child_main_loop():
 
     create_edge()
 
-#    print("Now creating your Cloud Edge. Please wait for approx 60 sec ..")
+    print("Now creating your Cloud Edge. Please wait for approx 60 sec ..")
     
     edgeinfo = get_edge_info()
-#    sys.stderr.write("Progress %3s%%" % (edgeinfo["progress"]))
+    sys.stderr.write("Progress %3s%%" % (edgeinfo["progress"]))
     pre_progress = int(edgeinfo["progress"])
     progress = int(edgeinfo["progress"])
     while ((edgeinfo["ready"] == False) and (edgeinfo["error"] == False)):
@@ -292,7 +292,7 @@ def _child_main_loop():
         print("Fail to create your Cloud Edge.")
         sys.exit()
 
-#    print("Edge Server IP address:", edge_ip_addr)
+    print("Edge Server IP address:", edge_ip_addr)
 
     w_flag = False
 
@@ -335,23 +335,12 @@ def _child_main_loop():
 
 #            time.sleep(1)
 
-def draw_text_at_center(img, text):
-  draw = PIL.ImageDraw.Draw(img)
-  draw.font = PIL.ImageFont.truetype(
-    "/usr/share/fonts/truetype/freefont/FreeMono.ttf", 20)
-
-  img_size = numpy.array(img.size)
-  txt_size = numpy.array(draw.font.getsize(text))
-  pos = (img_size - txt_size) / 2
-
-  draw.text(pos, text, (255, 255, 255))
-
 if __name__ == '__main__':
 
     pool = ThreadPoolExecutor(1)
     pool.submit(_child_main_loop)
-    time.sleep(60)
-    print("sleep ended")
+#    time.sleep(60)
+#    print("sleep ended")
 #        ESC_KEY = 27     # Escキー
 #        INTERVAL= 33     # 待ち時間
 #        FRAME_RATE = 30  # fps
@@ -364,9 +353,14 @@ if __name__ == '__main__':
 
     # カメラ映像取得
     cap = cv2.VideoCapture(DEVICE_ID)
-
+    
     # 保存ビデオファイルの準備
     end_flag, c_frame = cap.read()
+    if end_flag == True:
+        print("end_flag == True")
+    else:
+        print("end_flag == Faulse")
+
     height, width, channels = c_frame.shape
     print("h = {},w = {},c = {}".format(height,width,channels))
 #        rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
@@ -387,13 +381,13 @@ if __name__ == '__main__':
         #g_frame = cv2.GaussianBlur(c_frame, (15, 15), 10)
 
         #字幕生成
-        if q.empty != True:
+        if q.empty() != True:
             text = q.get()
             print("did q.get")
 #         print("OK")
         font = cv2.FONT_HERSHEY_PLAIN
-#        g_frame = cv2.putText(c_frame,text,(100,100),font, 3,(255,255,0),3)
-        draw_text_at_center(c_frame,text)
+        g_frame = cv2.putText(c_frame,text,(100,100),font, 3,(255,255,0),3)
+#        draw_text_at_center(c_frame,text)
 
         # フレーム表示
 #            cv2.imshow(ORG_WINDOW_NAME, c_frame)

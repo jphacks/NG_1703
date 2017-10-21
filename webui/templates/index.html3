@@ -2,16 +2,10 @@
 {% block body %}
 <h1>動画テストページ</h1>
 
-<!-- komagen_sd_clientの起動 --!>
-<form method="post">
-	<button type="submit">実行</button>
-</form>
-
-<!-- 実行ボタン --!>
-<button onclick="startVideo()">Start</button>
-<br />
-
 <!-- カメラの起動 --!>
+
+capCamera()
+
 <center>
 	<video id="local_video" autoplay style="width: 100vmin; height: 100vim; border: 1px solid black; "></video>
 </center>
