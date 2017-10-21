@@ -8,11 +8,11 @@ def cv_fourcc(c1, c2, c3, c4):
 
 
         #字幕生成
-def make_subtitle(c_frame,text,place_x,plaece_y,size)      
+def make_subtitle(c_frame,text,place_x,place_y,size):
         font = cv2.FONT_HERSHEY_PLAIN
         g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(255,255,0),3)
 
-	return g_frame
+        return (g_frame)
 
 
 if __name__ == '__main__':
