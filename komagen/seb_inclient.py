@@ -25,16 +25,16 @@ edge_ip_addr = ""
 session_id = ""
 
 # cv2.cv.CV_FOURCC
-def cv_fourcc(c1, c2, c3, c4):
-    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
-        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
+#def cv_fourcc(c1, c2, c3, c4):
+#    return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
+#        ((ord(c3) & 255) << 16) + ((ord(c4) & 255) << 24)
 
         #字幕生成
 def make_subtitle(c_frame,text,place_x,place_y,size):
-        font = cv2.FONT_HERSHEY_PLAIN
-        g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(255,255,0),3)
+    font = cv2.FONT_HERSHEY_PLAIN
+    g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(255,255,0),3)
 
-        return (g_frame)
+    return (g_frame)
 
 # Generate random string. It is used in session create to cloud edge.
 def random_string(length, seq=string.digits + string.ascii_lowercase):
@@ -85,7 +85,7 @@ def create_edge():
 #    print("Booting Edge Server.")
     
     edge_id = r.json()["edge_id"]
-#    print("edge id:" +edge_id)
+    print("edge id:" +edge_id)
     return r.json() 
 
 
@@ -161,7 +161,7 @@ def connect_edge_server():
 
     data = r.json()
     session_id = data["session"]
-#    print("Connected Successfully. Session ID:"+session_id)
+    print("Connected Successfully. Session ID:"+session_id)
 
     return session_id
 
@@ -186,7 +186,7 @@ def send_chunk_edge_server(chunk):
     if(r.status_code > 299):
         print ("Error! Edge server replied error code:"+str(r.status_code))
         sys.exit()
-#    print("Send data successfully")
+    print("Send data successfully")
     return True
 
 
@@ -241,8 +241,8 @@ def start_sound_detect():
                 fs = int(p_in.get_device_info_by_index(i)['defaultSampleRate'])
     chank_size = fs * 1
 
-#    print('use_device_index = ', use_device_index)
-#    print('SampleRate = ', fs)
+    print('use_device_index = ', use_device_index)
+    print('SampleRate = ', fs)
 
     # generate an input stream
     in_stream = p_in.open(format=py_format,
@@ -264,7 +264,7 @@ if __name__ == "__main__":
     INTERVAL= 33     # 待ち時間
     FRAME_RATE = 5  # fps
 
-    ORG_WINDOW_NAME = "org"
+#    ORG_WINDOW_NAME = "org"
     GAUSSIAN_WINDOW_NAME = "gaussian"
 
 #    GAUSSIAN_FILE_NAME = "gaussian.avi"
@@ -291,13 +291,14 @@ if __name__ == "__main__":
 
     create_edge()
 
-#    print("Now creating your Cloud Edge. Please wait for approx 60 sec ..")
+    print("Now creating your Cloud Edge. Please wait for approx 60 sec ..")
     
     edgeinfo = get_edge_info()
-#    sys.stderr.write("Progress %3s%%" % (edgeinfo["progress"]))
+    sys.stderr.write("Progress %3s%%" % (edgeinfo["progress"]))
     pre_progress = int(edgeinfo["progress"])
     progress = int(edgeinfo["progress"])
     while ((edgeinfo["ready"] == False) and (edgeinfo["error"] == False)):
+#        start = time.time()
         time.sleep(3)
         edgeinfo = get_edge_info()
         new_progress = int(edgeinfo["progress"])
@@ -307,44 +308,48 @@ if __name__ == "__main__":
             progress = int(new_progress)
             pre_progress = progress
         
-#        sys.stderr.write("\rProgress %3s%%" % (progress))
+        sys.stderr.write("\rProgress %3s%%" % (progress))
     sys.stderr.write("\n")
 
     if(edgeinfo["error"]):
         print("Fail to create your Cloud Edge.")
         sys.exit()
 
-#    print("Edge Server IP address:", edge_ip_addr)
+    print("Edge Server IP address:", edge_ip_addr)
 
     w_flag = False
 
     old_event = get_last_event()
 
     in_stream = start_sound_detect()
-
+        
+    count = 0
     while (in_stream.is_active() or (end_flag == True)):
-        text = "test"
+        if (count % 40 == 0): 
+            text = "test"
 #as client
-        if w_flag:
-            w_flag = False
-            if komagen_flag == True:
-                print("check start")
-                komagen_flag = False
-            send_chunk_edge_server(chunk)
+            if w_flag:
+                w_flag = False
+                if komagen_flag == True:
+                    print("check start")
+                    komagen_flag = False
+                send_chunk_edge_server(chunk)
             
-            e_flag = False
-            new_event = get_last_event()
-            if(new_event != None):
-                if(old_event == None):
-                    old_event= new_event 
-                    e_flag = True
-                elif(old_event['unixtime'] != new_event['unixtime']):
-                    old_event= new_event 
-                    e_flag = True
-            if(e_flag):
-#                print(""+new_event['event'])
-                 text = new_event['event']
-        #字幕生成
+                e_flag = False
+                new_event = get_last_event()
+                if(new_event != None):
+                    if(old_event == None):
+                        old_event= new_event 
+                        e_flag = True
+                    elif(old_event['unixtime'] != new_event['unixtime']):
+                        old_event= new_event 
+                        e_flag = True
+                if(e_flag):
+#                    print(""+new_event['event'])
+                    text = new_event['event']
+        count += 1
+#            print("time = {}".format(time.time()-start)) 
+       #字幕生成
         g_frame = make_subtitle(c_frame,text,200,200,3)
         # フレーム書き込み
 #        rec.write(g_frame)
