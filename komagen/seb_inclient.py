@@ -261,7 +261,7 @@ if __name__ == "__main__":
 
     ESC_KEY = 27     # Escキー
     INTERVAL= 33     # 待ち時間
-    FRAME_RATE = 5  # fps
+    FRAME_RATE = 30  # fps
 
 #    ORG_WINDOW_NAME = "org"
     GAUSSIAN_WINDOW_NAME = "gaussian"
@@ -324,7 +324,7 @@ if __name__ == "__main__":
         
     count = 0
     while (in_stream.is_active() or (end_flag == True)):
-        if (count % 40 == 0): 
+        if (count % 50 == 0): 
             text = "test"
 #as client
             if w_flag:
@@ -348,7 +348,7 @@ if __name__ == "__main__":
                     text = new_event['event']
 
 #            print("time = {}".format(time.time()-start)) 
-        if(count % 40 == 0):
+        if(count % 50 == 0):
             R = int(random.uniform(0,200))
             G = int(random.uniform(0,200))
             B = int(random.uniform(0,200))
