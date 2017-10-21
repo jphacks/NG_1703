@@ -3,7 +3,7 @@
 import komagen_sd_client
 from flask import Flask, render_template, abort
 from flaski.models import WikiContent
-import komates as koma
+import komates
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -15,7 +15,8 @@ def index():
 
 @app.route("/", methods=["POST"])
 def callkomagen():
-	koma.komagen()
+	koma = komates.komagen()
+	return koma
 
 if __name__ == "__main__":
 	app.run()
