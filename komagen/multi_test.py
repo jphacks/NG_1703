@@ -274,6 +274,7 @@ class NeetsDaemon(object):
         self._parent_main_loop()
 
     def _parent_main_loop(self):
+        time.sleep(40)
         ESC_KEY = 27     # Escキー
         INTERVAL= 33     # 待ち時間
         FRAME_RATE = 30  # fps
@@ -291,11 +292,11 @@ class NeetsDaemon(object):
     # 保存ビデオファイルの準備
         end_flag, c_frame = cap.read()
         height, width, channels = c_frame.shape
-        rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
-                              cv_fourcc('X', 'V', 'I', 'D'), \
-                              FRAME_RATE, \
-                              (width, height), \
-                              True)
+#        rec = cv2.VideoWriter(GAUSSIAN_FILE_NAME, \
+#                              cv_fourcc('X', 'V', 'I', 'D'), \
+#                              FRAME_RATE, \
+#                              (width, height), \
+#                              True)
 
     # ウィンドウの準備
         cv2.namedWindow(ORG_WINDOW_NAME)
@@ -307,9 +308,9 @@ class NeetsDaemon(object):
         #g_frame = cv2.GaussianBlur(c_frame, (15, 15), 10)
 
         #字幕生成
-       
-            text = self.queue.get()
-            print("OK")
+            if self.queue.empty:
+                text = self.queue.get()
+#            print("OK")
             font = cv2.FONT_HERSHEY_PLAIN
             g_frame = cv2.putText(c_frame,text,(100,100),font, 5,(255,255,0),3)
 
@@ -319,7 +320,7 @@ class NeetsDaemon(object):
             cv2.imshow(GAUSSIAN_WINDOW_NAME, g_frame)
 
         # フレーム書き込み
-            rec.write(g_frame)
+#            rec.write(g_frame)
 
         # Escキーで終了
 #            key = cv2.waitKey(INTERVAL)
