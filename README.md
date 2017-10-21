@@ -1,9 +1,9 @@
-# サンプル（プロダクト名）
+# プロダクト名　「　」
 
 [![Product Name](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/channel/UC4PtjOfZTbVp9DwtJv82Lzg)
 
 ## 製品概要
-### X Tech（X → 今回皆さんが選定した好きな言葉に書き換えてください）
+### X Tech
 
 ### 背景（製品開発のきっかけ、課題等）
 ここに
@@ -34,8 +34,7 @@
 #### API・データ
 今回スポンサーから提供されたAPI、製品などの外部技術があれば記述をして下さい。
 
-* 
-* 
+* NEC物音認識API
 * 
 
 #### フレームワーク・ライブラリ・モジュール
