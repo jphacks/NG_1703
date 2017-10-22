@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+       <title>TEST PAGE.</title>
+  </head>
+<body>
+<script>
+  //FileReaderの作成
+  var reader = new FileReader();
+  //テキスト形式で読み込む
+  reader.readAsText("file");
+  
+  //読込終了後の処理
+  reader.onload = function(ev){
+    //テキストエリアに表示する
+    document.test.txt.value = reader.result;
+  }
+</script>
+</body>
+</html>

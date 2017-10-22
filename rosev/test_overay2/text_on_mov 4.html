@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>TEST PAGE.</title>
+    <script>
+    myNowCnt = 0;	// 現在表示している画像番号
+    function myChange(){	// 定期的に画像を更新する関数
+        if (myNowCnt == myImage.length-1){	// 最後の画像まで表示したのなら
+            myNowCnt=0;	// 最初の画像に戻す
+        }else{	// 最後の画像まで表示していないのなら
+            myNowCnt++;	// 次の画像へ
+        }	
+        document.sshow.src = "file:///Users/rosev/Desktop/test2.gif";	// 次の画像を表示する
+        setTimeout( "myChange()" , 1000 );	// 1秒周期に画像を更新する
+    }	
+    </script>
+  </head>
+<body>
+    <!--<video src=file:///Users/rosev/Desktop/mov/test.MOV width="800" height="450" autoplay loop></video> -->
+  <div style="position:absolute; left: 300px; top: 300px; width: 300px;">
+    <script>
+       myChange();
+    </script>
+  </div>
+</body>
+</html>

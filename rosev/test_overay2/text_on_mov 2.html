@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <title>TEST PAGE.</title>
+    <script>
+    function dispImg(){
+        //document.write('<img src="file:///Users/rosev/Desktop/test2.gif" alt="HELLO">');
+        document.photo.src="file:///Users/rosev/Desktop/test2.gif";
+    }
+    var timerId;
+ 
+    // ボックスを表示して、タイマーを開始
+    function showBox() {
+        document.getElementById("temporaryBox").style.display = "block"; // ボックスを表示
+        timerId = setTimeout( closeBox , 5000 ); // タイマーを開始
+        document.getElementById("btnShowBox").disabled = true; // 表示用ボタンを無効化
+    }
+ 
+    // ボックスを消して、タイマーを終了 
+    function closeBox() {
+        document.getElementById("temporaryBox").style.display = "none"; // ボックスを消す
+        clearTimeout( timerId ); // タイマーを終了
+        document.getElementById("btnShowBox").disabled = false; // 表示用ボタンを有効化
+        document.getElementById("btnKeepBox").disabled = false; // 維持用ボタンを有効化
+    }
+ 
+    // タイマーだけを中止
+    function keepBox() {
+        clearTimeout( timerId ); // タイマーを終了
+        document.getElementById("btnKeepBox").disabled = true; // 維持用ボタンを無効化
+    }
+    </script>
+  </head>
+<body>
+  <video src=file:///Users/rosev/Desktop/mov/test.MOV width="800" height="450" autoplay loop></video> 
+  <div style="position:absolute; left: 300px; top: 300px; width: 300px;">
+  <script>
+        //showBox();
+       // close(Box);
+       dispImg();
+    </script>
+  </div>
+</body>
+</html>
