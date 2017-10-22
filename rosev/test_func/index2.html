@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+       <title>TEST PAGE.</title>
+  </head>
+<body>
+	<video src=file:///Users/rosev/Desktop/mov/test.MOV width="1024" height="576" autoplay loop></video>
+	<div style="position:absolute; left: 250px; top: 250px; width: 0px;">
+		<img id="gazo" src="" width="320" height="240" border="0" alt="">
+		<script>
+			setTimeout("changeIMG()",3000);
+			setTimeout("changeIMG()",5000); //ここの3つのコードが同時に実行されているため
+			setTimeout("changeIMG()",6000); //正しく一つづつ実行されるように書き換える必要がある
+		</script>
+	</div>
+	
+<script>
+	//画像を配列に格納する
+	var img = new Array();
+	
+	img[0] = new Image();
+	img[0].src = "test1.gif";
+	img[1] = new Image();
+	img[1].src = "";
+
+	//画像番号用のグローバル変数
+	var cnt=0;
+
+	//画像切り替え関数
+	function changeIMG(){
+  		document.getElementById("gazo").src=img[cnt].src;
+  		cnt++;
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<HTML>  
+<HEAD>
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=x-sjis">
+  <TITLE>Test</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffffff" onLoad="suraido()">
+
+<P><CENTER>
+
+<SCRIPT language="JavaScript">
+<!--
+num=1;
+function suraido(){
+	if(num==1){
+		document.photo.src="file:///Users/rosev/Desktop/test2.gif";
+		num=2;
+
+	}else if(num==2){
+		document.photo.src="";
+		num=3;
+
+	}
+	setTimeout("suraido()",5000);
+}
+//-->
+
+  </SCRIPT>
+
+<A 
+<IMG SRC="file:///Users/rosev/Desktop/test2.gif" NAME="photo" ALIGN="BOTTOM"
+WIDTH="200" HEIGHT="215" BORDER="0">
+</A>
+
+</CENTER>
+
+</BODY>
+</HTML>
