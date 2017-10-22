@@ -9,21 +9,6 @@ import json
 import string, random
 import cv2
 
-#open db(actually it is just .txt)
-db_file = open('sample_db.txt','r')
-db_string = db_file.readlines()
-print(db_string)
-
-db_ennum = len(db_string)
-#db_split_en = [0 for i in range(db_ennum)]
-db_split_en = []
-#example db_split[0] = [VisitorsBell R
-for i in range(db_ennum):
-    db_split_en.append(db_string[i].split(" "))
-print(db_split_en)
-print(db_split_en[1][0])
-
-
 # set Device ID to variable "id".
 # Device ID: You can get the id from portal
 # https://www6.arche.blue/portal/
@@ -363,15 +348,21 @@ if __name__ == "__main__":
                     text = new_event['event']
 
 #            print("time = {}".format(time.time()-start)) 
-        if(count % 50 == 0):
-            R = int(random.uniform(0,200))
-            G = int(random.uniform(0,200))
-            B = int(random.uniform(0,200))
-       #字幕生成
-            place_x = int(random.uniform(0,400))
-            place_y = int(random.uniform(0,400))
-            font = cv2.FONT_HERSHEY_PLAIN
-            size = random.uniform(5,12)
+#        字幕作成
+#        if(count % 50 == 0):
+#            R = int(random.uniform(0,200))
+        R = 100
+#            G = int(random.uniform(0,200))
+        G = 100
+#            B = int(random.uniform(0,200))
+        B = 100
+#            place_x = int(random.uniform(0,400))
+        place_x = 100
+#            place_y = int(random.uniform(0,400))
+        place_y = 100
+        font = cv2.FONT_HERSHEY_PLAIN
+#            size = random.uniform(5,12)
+        size = 7
         count += 1
         g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(R,G,B),15)
 #        g_frame = make_subtitle(c_frame,text,200,200,3)
