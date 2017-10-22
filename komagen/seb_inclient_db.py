@@ -9,6 +9,21 @@ import json
 import string, random
 import cv2
 
+#open db(actually it is just .txt)
+db_file = open('sample_db.txt','r')
+db_string = db_file.readlines()
+print(db_string)
+
+db_ennum = len(db_string)
+#db_split_en = [0 for i in range(db_ennum)]
+db_split_en = []
+#example db_split[0] = [VisitorsBell R
+for i in range(db_ennum):
+    db_split_en.append(db_string[i].split(" "))
+print(db_split_en)
+print(db_split_en[1][0])
+
+
 # set Device ID to variable "id".
 # Device ID: You can get the id from portal
 # https://www6.arche.blue/portal/
