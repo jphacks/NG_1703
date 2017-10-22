@@ -1,0 +1,3 @@
+VisitorsBell R
+SmallBell G
+Timer Alarm B
