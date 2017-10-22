@@ -1,6 +1,6 @@
 # プロダクト名 「On You」
 
-[![Product Name](https://raw.github.com/GabLeRoux/WebMole/master/ressources/WebMole_Youtube_Video.png)](https://www.youtube.com/watch?v=cor0Uud0-wA&feature=youtu.be)
+[![Product Name](https://github.com/jphacks/NG_1703/blob/master/171022-0003.png)](https://www.youtube.com/watch?v=cor0Uud0-wA&feature=youtu.be)
 
 ## 製品概要
 ### 音喩 X Tech
