@@ -365,7 +365,7 @@ if __name__ == "__main__":
         size = 7
         count += 1
 #        g_frame = cv2.putText(c_frame,text,(place_x,place_y),font, size,(R,G,B),15)
-        g_frame = make_subtitle(c_frame,text,200,200,3)
+        g_frame = make_subtitle(c_frame,text,200,200,3,100,100,100)
         # フレーム書き込み
 #        rec.write(g_frame)
         # フレーム表示
