@@ -3,7 +3,7 @@
 [![Product Name](https://github.com/jphacks/NG_1703/blob/master/171022-0003.png)](https://www.youtube.com/watch?v=cor0Uud0-wA&feature=youtu.be)
 
 ## 製品概要
-### [紹介スライド](https://github.com/jphacks/NG_1703/blob/master/komagen/JPhacks_ng_1703.pptx)
+### [紹介スライド](https://github.com/jphacks/NG_1703/blob/master/JPhacks_ng_1703.pdf)
 
 ### 音喩 X Tech
 
